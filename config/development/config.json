@@ -1,0 +1,76 @@
+{
+  "server": {
+    "port": 3000,
+    "host": "localhost",
+    "cors": {
+      "origin": ["http://localhost:3000", "http://localhost:3001"],
+      "credentials": true
+    }
+  },
+  "database": {
+    "mongodb": {
+      "uri": "mongodb://localhost:27017/lbsiot_dev",
+      "options": {
+        "useNewUrlParser": true,
+        "useUnifiedTopology": true
+      }
+    },
+    "redis": {
+      "host": "localhost",
+      "port": 6379,
+      "db": 0
+    }
+  },
+  "queue": {
+    "rabbitmq": {
+      "url": "amqp://localhost:5672",
+      "queues": {
+        "location_data": "location_data_queue",
+        "poi_data": "poi_data_queue",
+        "device_status": "device_status_queue"
+      }
+    }
+  },
+  "amap": {
+    "api_key": "YOUR_AMAP_API_KEY",
+    "security_js_code": "YOUR_AMAP_SECURITY_CODE",
+    "version": "2.0",
+    "plugins": ["AMap.Scale", "AMap.ToolBar", "AMap.Geocoder", "AMap.PlaceSearch"],
+    "default_center": {
+      "lng": 116.4074,
+      "lat": 39.9042
+    },
+    "default_zoom": 12,
+    "map_style": "amap://styles/normal",
+    "view_mode": "3D"
+  },
+  "iot": {
+    "devices": {
+      "max_connections": 1000,
+      "heartbeat_interval": 30000,
+      "data_retention_days": 90
+    },
+    "protocols": {
+      "mqtt": {
+        "port": 1883,
+        "keepalive": 60
+      },
+      "http": {
+        "endpoint": "/api/iot/data"
+      }
+    }
+  },
+  "logging": {
+    "level": "debug",
+    "format": "combined",
+    "file": "logs/development.log"
+  },
+  "security": {
+    "jwt_secret": "your-jwt-secret-key",
+    "bcrypt_rounds": 10,
+    "rate_limit": {
+      "window_ms": 900000,
+      "max_requests": 100
+    }
+  }
+}

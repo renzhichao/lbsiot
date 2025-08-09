@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="基于位置服务的物联网系统 - 高德地图集成" />
+  <meta name="keywords" content="LBS, IoT, 高德地图, 位置服务, 物联网, 实时定位" />
+  <meta name="author" content="LBS IoT Team" />
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://lbsiot.example.com/" />
+  <meta property="og:title" content="LBS IoT - 基于位置服务的物联网系统" />
+  <meta property="og:description" content="实时设备定位追踪和数据可视化平台" />
+  <meta property="og:image" content="/og-image.png" />
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://lbsiot.example.com/" />
+  <meta property="twitter:title" content="LBS IoT - 基于位置服务的物联网系统" />
+  <meta property="twitter:description" content="实时设备定位追踪和数据可视化平台" />
+  <meta property="twitter:image" content="/twitter-image.png" />
+  
+  <link rel="apple-touch-icon" href="/logo192.png" />
+  <link rel="manifest" href="/manifest.json" />
+  
+  <!-- 预加载关键资源 -->
+  <link rel="preconnect" href="https://webapi.amap.com" />
+  <link rel="dns-prefetch" href="https://webapi.amap.com" />
+  
+  <!-- 高德地图API预加载（可选，如果需要更快的加载速度） -->
+  <!-- <link rel="preload" href="https://webapi.amap.com/maps?v=2.0&key=YOUR_API_KEY" as="script" /> -->
+  
+  <title>LBS IoT - 基于位置服务的物联网系统</title>
+  
+  <style>
+    /* 加载动画样式 */
+    .loading-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    }
+    
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #1890ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .loading-text {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    
+    .loading-subtext {
+      color: #999;
+      font-size: 12px;
+    }
+    
+    /* 隐藏加载动画的类 */
+    .loading-hidden {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+  <noscript>
+    <div style="
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    ">
+      <h1 style="color: #ff4d4f; margin-bottom: 16px;">⚠️ JavaScript 已禁用</h1>
+      <p style="color: #666; margin-bottom: 16px;">此应用需要启用 JavaScript 才能正常运行。</p>
+      <p style="color: #999; font-size: 14px;">请在浏览器设置中启用 JavaScript，然后刷新页面。</p>
+    </div>
+  </noscript>
+  
+  <!-- 初始加载动画 -->
+  <div id="initial-loading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">正在加载 LBS IoT 系统</div>
+    <div class="loading-subtext">初始化地图服务和数据连接...</div>
+  </div>
+  
+  <!-- React 应用挂载点 -->
+  <div id="root"></div>
+  
+  <script>
+    // 隐藏初始加载动画
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        const loadingElement = document.getElementById('initial-loading');
+        if (loadingElement) {
+          loadingElement.classList.add('loading-hidden');
+          setTimeout(function() {
+            loadingElement.style.display = 'none';
+          }, 300);
+        }
+      }, 1000); // 至少显示1秒加载动画
+    });
+    
+    // 错误处理
+    window.addEventListener('error', function(e) {
+      console.error('全局错误:', e.error);
+      // 可以在这里添加错误上报逻辑
+    });
+    
+    // 未处理的Promise拒绝
+    window.addEventListener('unhandledrejection', function(e) {
+      console.error('未处理的Promise拒绝:', e.reason);
+      // 可以在这里添加错误上报逻辑
+    });
+    
+    // 性能监控
+    if ('performance' in window) {
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          const perfData = performance.getEntriesByType('navigation')[0];
+          if (perfData) {
+            console.log('页面加载性能:', {
+              domContentLoaded: perfData.domContentLoadedEventEnd - perfData.domContentLoadedEventStart,
+              loadComplete: perfData.loadEventEnd - perfData.loadEventStart,
+              totalTime: perfData.loadEventEnd - perfData.fetchStart
+            });
+          }
+        }, 0);
+      });
+    }
+  </script>
+</body>
+</html>
